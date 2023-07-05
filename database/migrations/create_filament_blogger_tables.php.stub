@@ -1,0 +1,54 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up()
+    {
+        // Categories
+        Schema::create('blogger_categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->longText('description')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->timestamps();
+        });
+            // Parent foreign key
+            Schema::table('blogger_categories',function (Blueprint $table){
+                $table->foreign('parent_id')->references('id')->on('blogger_categories')->nullOnDelete();
+            });
+        Schema::create('blogger_authors', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('photo_id')->nullable();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->longText('bio')->nullable();
+            $table->json('links')->nullable();
+            $table->timestamps();
+        });
+        Schema::create('blogger_posts', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('blogger_author_id')->nullable()->constrained();
+            $table->foreignId('blogger_category_id')->nullable()->constrained();
+            $table->string('status');
+            $table->string('title');
+            $table->string('slug')->unique();
+            $table->text('excerpt')->nullable();
+            $table->longText('content')->nullable();
+            $table->dateTime('published_at')->nullable();
+            $table->unsignedBigInteger('featured_image_id')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('blogger_posts');
+        Schema::dropIfExists('blogger_authors');
+        Schema::dropIfExists('blogger_categories');
+    }
+};
