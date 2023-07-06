@@ -133,10 +133,36 @@ To use SEO, you will need to add the following snippet to your website's head or
 
 ### Integrating With Spatie Tags
 
-
+If you haven't already, you can make a resource to manage your tags. This can be useful for all of your taggables.
+Run the following command in your project:
 
 ```
-php artisan make:filament-resource TagsResource --simple --generate
+php artisan make:filament-resource TagResource --simple
+```
+You will then have to replace the Tag model in your resource. You optionally can set the navigation group and icon:
+
+```php
+...
+use Spatie\Tags\Tag;
+
+class TagResource extends Resource
+{
+    protected static ?string $model = Tag::class;
+    protected static ?string $navigationGroup = 'Blog';
+    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static ?int $navigationSort = 3;
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\TextInput::make('name')
+                    ->required(),
+                Forms\Components\TextInput::make('slug')
+                    ->required(),
+                Forms\Components\TextInput::make('type'),
+            ]);
+    }
 ```
 
 ### Package Documentation
