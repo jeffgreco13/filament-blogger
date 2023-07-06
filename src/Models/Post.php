@@ -55,9 +55,9 @@ class Post extends Model
         return new SEOData(
             title: $this->title,
             description: $this->excerpt,
-            author: $this->author->name,
+            author: $this->author?->name,
             published_time: $this->published_at,
-            image: $this->featuredImage->url
+            image: $this->featuredImage?->url ?? null
         );
     }
 
