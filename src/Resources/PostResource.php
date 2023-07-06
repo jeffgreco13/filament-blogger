@@ -82,6 +82,7 @@ class PostResource extends Resource
                     ]),
                     Forms\Components\Section::make('SEO')
                         ->collapsible()
+                        ->collapsed()
                         // ->description('')
                         ->schema([
                             SEO::make()
